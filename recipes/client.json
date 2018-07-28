@@ -1,0 +1,9 @@
+{
+    "name": "maze.js",
+    "path": "web/js/",
+    "files": [
+        "src/shared/**/*.js",
+        "src/client/*/**/*.js",
+        "src/client/*.js"
+    ]
+}

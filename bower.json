@@ -1,0 +1,23 @@
+{
+    "name": "maze",
+    "version": "1.0.0",
+    "authors": [
+      {
+        "name": "Ll@nas",
+        "email": "llanas@boris-maurence.com",
+        "homepage": "https://github.com/lutangar"
+      }
+    ],
+    "main": "dist/curvytron.js",
+    "dependencies": {
+      "tom32i-event-emitter.js": "~0.1.*",
+      "angular": "1.4.3",
+      "angular-route": "~1.4.3"
+    },
+    "ignore": [
+      "**/.*",
+      "node_modules",
+      "bower_components"
+    ]
+  }
+  

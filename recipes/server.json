@@ -1,0 +1,10 @@
+{
+    "name": "maze.js",
+    "path": "bin/",
+    "files": [
+        "src/shared/**/*.js",
+        "src/server/dependencies.js",
+        "src/server/*/**/*.js",
+        "src/server/launcher.js"
+    ]
+}

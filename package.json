@@ -1,0 +1,34 @@
+{
+  "name": "maze",
+  "version": "1.0.0",
+  "description": "Maze game design for fun",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/llanas/Maze.git"
+  },
+  "author": "@llanas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/llanas/Maze/issues"
+  },
+  "homepage": "https://github.com/llanas/Maze#readme",
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-concat": "^2.4.*",
+    "gulp-htmlmin": "^4.0.*",
+    "gulp-jshint": "^2.1.0",
+    "gulp-minify-css": "~0.3.*",
+    "gulp-uglify": "^3.0.*",
+    "gulp-wrap": "^0.14.0",
+    "jshint": "^2.9.*"
+  },
+  "dependencies": {
+    "express": "^4.13.3",
+    "faye-websocket": "^0.10.0"
+  }
+}
