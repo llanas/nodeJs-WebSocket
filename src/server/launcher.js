@@ -1,7 +1,7 @@
 var config,
     packageInfo = require('../package.json'),
     config = {
-        port: 8081,
+        port: 8088,
         inspector: { enabled: false }
     };
 
