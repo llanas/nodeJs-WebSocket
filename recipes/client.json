@@ -1,5 +1,5 @@
 {
-    "name": "maze.js",
+    "name": "starter.js",
     "path": "web/js/",
     "files": [
         "src/shared/**/*.js",

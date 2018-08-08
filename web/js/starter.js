@@ -30,19 +30,21 @@ ModelSocketClient.prototype.onClose = function(e) {
 function HomeController($scope) {
     
     this.$scope     = $scope;
+
+    console.info('MazeController have been created');
 }
 
 HomeController.prototype.constructor = HomeController;
-function MazeController($scope, client) {
+function StarterController($scope, client) {
 
 
     this.client     = client;
     this.$scope     = $scope;
 
-    console.info('MazeController have been created');
+    console.info('StarterController have been created');
 }
 
-MazeController.prototype.constructor = MazeController;
+StarterController.prototype.constructor = StarterController;
 function SocketClient() {
     
     
@@ -68,21 +70,21 @@ SocketClient.prototype.attachEvent = function() {
 SocketClient.prototype.onOpen = function() {
     console.info('Socket open');
 }
-var mazeApp = angular.module('mazeApp', ['ngRoute']);
+var starterApp = angular.module('starterApp', ['ngRoute']);
 
-mazeApp.service('SocketClient', SocketClient);
+starterApp.service('SocketClient', SocketClient);
 
-mazeApp.controller(
-    'MazeController', 
-    ['$scope', 'SocketClient', MazeController]
+starterApp.controller(
+    'StarterController', 
+    ['$scope', 'SocketClient', StarterController]
 );
 
-mazeApp.controller(
+starterApp.controller(
     'HomeController',
     ['$scope', HomeController]
 );
 
-mazeApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+starterApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider
         .when('/', {
             templateUrl: 'js/views/home.html',

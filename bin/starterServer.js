@@ -99,7 +99,7 @@ ServerSocketClient.prototype.constructor = ServerSocketClient;
 var config,
     packageInfo = require('../package.json'),
     config = {
-        port: 8080,
+        port: 8088,
         inspector: { enabled: false }
     };
 

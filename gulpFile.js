@@ -24,7 +24,7 @@ gulp.task('server', function() {
         .pipe(gulp.dest(recipes.server.path));
 });
 
-gulp.task('front-min', function() {
+gulp.task('front-full', function() {
     return gulp.src(recipes.client.files)
         .pipe(concat(recipes.client.name))
         .pipe(wrap('(function(){\n"use strict";\n<%= contents %>\n})();'))
@@ -44,4 +44,13 @@ gulp.task('views', function() {
         .pipe(gulp.dest(jsDir + 'views'));
 });
 
-gulp.task('default', gulp.parallel('server', 'front-min', 'front-expose', 'views'));
+gulp.task('dev', gulp.parallel('server', 'front-full', 'front-expose', 'views'));
+
+gulp.task('watch', gulp.series('dev', function() {
+    gulp.watch('src/shared/**/*.js', gulp.parallel('server', 'front-full'));
+    gulp.watch('src/client/**/*.js', gulp.parallel('front-full'));
+    gulp.watch('src/server/**/*.js', gulp.parallel('server'));
+    gulp.watch('src/client/views/*/*.html', gulp.parallel('views'));
+}));
+
+gulp.task('default', gulp.parallel('server', 'front-full', 'front-expose', 'views'));

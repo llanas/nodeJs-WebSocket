@@ -1,23 +1,19 @@
 {
-  "name": "maze",
+  "name": "nodejs-websocket",
   "version": "1.0.0",
-  "description": "Maze game design for fun",
+  "description": "Starter nodeJs server and front for websocket application",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "install": "bower install",
-    "build":"gulp"
+    "build": "gulp"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/llanas/Maze.git"
+    "url": "git@vps489251.ovh.net:repositories/starterPack/nodeJs-WebSocket"
   },
   "author": "@llanas",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/llanas/Maze/issues"
-  },
-  "homepage": "https://github.com/llanas/Maze#readme",
   "devDependencies": {
     "gulp": "^4.0.0",
     "gulp-concat": "^2.4.*",
@@ -26,7 +22,7 @@
     "gulp-minify-css": "~0.3.*",
     "gulp-uglify": "^3.0.*",
     "gulp-wrap": "^0.14.0",
-    "jshint": "^2.9.*"
+    "jshint": "^2.9.6"
   },
   "dependencies": {
     "express": "^4.13.3",

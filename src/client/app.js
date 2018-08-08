@@ -1,18 +1,18 @@
-var mazeApp = angular.module('mazeApp', ['ngRoute']);
+var starterApp = angular.module('starterApp', ['ngRoute']);
 
-mazeApp.service('SocketClient', SocketClient);
+starterApp.service('SocketClient', SocketClient);
 
-mazeApp.controller(
-    'MazeController', 
-    ['$scope', 'SocketClient', MazeController]
+starterApp.controller(
+    'StarterController', 
+    ['$scope', 'SocketClient', StarterController]
 );
 
-mazeApp.controller(
+starterApp.controller(
     'HomeController',
     ['$scope', HomeController]
 );
 
-mazeApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+starterApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider
         .when('/', {
             templateUrl: 'js/views/home.html',
