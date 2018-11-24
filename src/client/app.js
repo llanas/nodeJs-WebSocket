@@ -6,16 +6,3 @@ starterApp.controller(
     'StarterController', 
     ['$scope', 'SocketClient', StarterController]
 );
-
-starterApp.controller(
-    'HomeController',
-    ['$scope', HomeController]
-);
-
-starterApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-    $routeProvider
-        .when('/', {
-            templateUrl: 'js/views/home.html',
-            controller: 'HomeController'
-        })
-}]);

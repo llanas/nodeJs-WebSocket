@@ -1,10 +1,9 @@
-function ServerSocketClient(socket, ip) {
+class ServerSocketClient extends ModelSocketClient {
 
-    ModelSocketClient.call(this, socket);
+    constructor(socket, ip) {
+        super(socket);
 
-    this.ip     = ip;
-    this.id     = null;
+        this.ip     = ip;
+        this.id     = null;
+    }
 }
-
-ServerSocketClient.prototype = Object.create(ModelSocketClient.prototype);
-ServerSocketClient.prototype.constructor = ServerSocketClient;

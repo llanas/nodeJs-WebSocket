@@ -1,10 +1,11 @@
-function StarterController($scope, client) {
+class StarterController extends AbstractController {
 
+    constructor($scope, client) {
+        super($scope);
 
-    this.client     = client;
-    this.$scope     = $scope;
+        this.client     = client;
+        this.$scope     = $scope;
 
-    console.info('StarterController have been created');
+        console.info('StarterController have been created');
+    }
 }
-
-StarterController.prototype.constructor = StarterController;

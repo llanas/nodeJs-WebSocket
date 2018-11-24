@@ -1,74 +1,81 @@
 (function(){
 "use strict";
-function ModelSocketClient(socket) {
+class ModelSocketClient extends EventEmitter {
 
-    this.socket     = socket;
-    this.connect    = true;
+    constructor(socket) {
+        super();
 
-    this.onMessage  = this.onMessage.bind(this);
-    this.onClose    = this.onClose.bind(this);
+        this.socket     = socket;
+        this.connect    = true;
 
-    this.attachEvent();
-}
+        this.attachEvent();
+    }
 
-ModelSocketClient.prototype.constructor = ModelSocketClient;
-
-ModelSocketClient.prototype.attachEvent = function() {
-
-    this.socket.addEventListener('message', this.onMessage);
-    this.socket.addEventListener('close', this.onClose);
-}
-
-ModelSocketClient.prototype.onMessage = function(e) {
-    console.info('Message Received : ', JSON.parse(e.data));
-}
-
-ModelSocketClient.prototype.onClose = function(e) {
-    this.connected = false;
-    console.info('Socket closed');
-}
-function HomeController($scope) {
+    attachEvent() {
     
-    this.$scope     = $scope;
+        this.socket.addEventListener('message', this.onMessage);
+        this.socket.addEventListener('close', this.onClose);
+    }
 
-    console.info('MazeController have been created');
+    onMessage(e) {
+        console.info('Message Received : ', JSON.parse(e.data));
+    }
+
+    onClose(e) {
+        this.connected = false;
+        console.info('Socket closed');
+    }
+
+    sendEvent(event) {
+        this.socket.send(JSON.stringify(event));
+    }
 }
-
-HomeController.prototype.constructor = HomeController;
-function StarterController($scope, client) {
-
-
-    this.client     = client;
-    this.$scope     = $scope;
-
-    console.info('StarterController have been created');
-}
-
-StarterController.prototype.constructor = StarterController;
-function SocketClient() {
+class AbstractController extends EventEmitter {
     
-    
-    this.onOpen     = this.onOpen.bind(this);
-    this.connected  = false
-
-    var Socket      = window.MozWebSocket || window.WebSocket;
-
-    ModelSocketClient.call(this, new Socket('ws://' + document.location.host + document.location.pathname, ['websocket']));
-
-    this.socket.addEventListener('open', this.onOpen);
-    
+    constructor($scope) {
+        super();    
+        this.$scope = $scope;
+    }
 }
+class StarterController extends AbstractController {
 
-SocketClient.prototype = Object.create(ModelSocketClient.prototype);
-SocketClient.prototype.constructor = SocketClient;
+    constructor($scope, client) {
+        super($scope);
 
-SocketClient.prototype.attachEvent = function() {
+        this.client     = client;
+        this.$scope     = $scope;
 
-    this.socket.addEventListener('open', this.onOpen);
+        console.info('StarterController have been created');
+    }
 }
+class SocketClient extends ModelSocketClient {
+    
+    constructor() {
+        super();
 
-SocketClient.prototype.onOpen = function() {
-    console.info('Socket open');
+        this.onOpen     = this.onOpen.bind(this);
+        this.connected  = false
+
+        var Socket      = window.MozWebSocket || window.WebSocket;
+
+        super.call(new Socket('ws://' + document.location.host + document.location.pathname, ['websocket']));
+
+        this.socket.addEventListener('open', this.onOpen);
+        this.socket.addEventListener('start', this.onStart);
+    }
+
+    attachEvent() {
+        this.socket.addEventListener('open', this.onOpen);
+    }
+
+    onOpen() {
+        console.info('Socket open');
+        this.sendEvent('start');
+    }
+
+    onStart() {
+        console.info('Application lancé : ' + JSON.stringify(data));
+    }
 }
 var starterApp = angular.module('starterApp', ['ngRoute']);
 
@@ -78,17 +85,4 @@ starterApp.controller(
     'StarterController', 
     ['$scope', 'SocketClient', StarterController]
 );
-
-starterApp.controller(
-    'HomeController',
-    ['$scope', HomeController]
-);
-
-starterApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-    $routeProvider
-        .when('/', {
-            templateUrl: 'js/views/home.html',
-            controller: 'HomeController'
-        })
-}]);
 })();

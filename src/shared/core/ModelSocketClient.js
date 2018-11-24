@@ -1,27 +1,30 @@
-function ModelSocketClient(socket) {
+class ModelSocketClient extends EventEmitter {
 
-    this.socket     = socket;
-    this.connect    = true;
+    constructor(socket) {
+        super();
 
-    this.onMessage  = this.onMessage.bind(this);
-    this.onClose    = this.onClose.bind(this);
+        this.socket     = socket;
+        this.connect    = true;
 
-    this.attachEvent();
-}
+        this.attachEvent();
+    }
 
-ModelSocketClient.prototype.constructor = ModelSocketClient;
+    attachEvent() {
+    
+        this.socket.addEventListener('message', this.onMessage);
+        this.socket.addEventListener('close', this.onClose);
+    }
 
-ModelSocketClient.prototype.attachEvent = function() {
+    onMessage(e) {
+        console.info('Message Received : ', JSON.parse(e.data));
+    }
 
-    this.socket.addEventListener('message', this.onMessage);
-    this.socket.addEventListener('close', this.onClose);
-}
+    onClose(e) {
+        this.connected = false;
+        console.info('Socket closed');
+    }
 
-ModelSocketClient.prototype.onMessage = function(e) {
-    console.info('Message Received : ', JSON.parse(e.data));
-}
-
-ModelSocketClient.prototype.onClose = function(e) {
-    this.connected = false;
-    console.info('Socket closed');
+    sendEvent(event) {
+        this.socket.send(JSON.stringify(event));
+    }
 }

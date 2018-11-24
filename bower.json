@@ -1,5 +1,5 @@
 {
-  "name": "nodeJs-WebSocket",
+  "name": "nodejs-websocket",
   "version": "1.0.0",
   "authors": [
     {
@@ -10,8 +10,8 @@
   "main": "web/starter.js",
   "dependencies": {
     "tom32i-event-emitter.js": "~0.1.*",
-    "angular": "1.4.3",
-    "angular-route": "~1.4.3"
+    "angular": "6.2.0",
+    "angular-route": "~6.2.^"
   },
   "ignore": [
     "**/.*",
@@ -19,6 +19,6 @@
     "bower_components"
   ],
   "resolutions": {
-    "angular": "1.4.3"
+    "angular": "6.2.^"
   }
 }

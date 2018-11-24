@@ -2,9 +2,9 @@
     "name": "starterServer.js",
     "path": "bin/",
     "files": [
-        "src/shared/**/*.js",
         "src/server/dependencies.js",
         "src/server/*/**/*.js",
+        "src/shared/**/*.js",
         "src/server/launcher.js"
     ]
 }

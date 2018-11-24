@@ -1,101 +1,109 @@
-function ModelSocketClient(socket) {
-
-    this.socket     = socket;
-    this.connect    = true;
-
-    this.onMessage  = this.onMessage.bind(this);
-    this.onClose    = this.onClose.bind(this);
-
-    this.attachEvent();
-}
-
-ModelSocketClient.prototype.constructor = ModelSocketClient;
-
-ModelSocketClient.prototype.attachEvent = function() {
-
-    this.socket.addEventListener('message', this.onMessage);
-    this.socket.addEventListener('close', this.onClose);
-}
-
-ModelSocketClient.prototype.onMessage = function(e) {
-    console.info('Message Received : ', JSON.parse(e.data));
-}
-
-ModelSocketClient.prototype.onClose = function(e) {
-    this.connected = false;
-    console.info('Socket closed');
-}
-var WebSocket = require('faye-websocket'),
+var EventEmitter = require('events').EventEmitter, 
+    WebSocket = require('faye-websocket'),
     express = require('express'),
     http = require('http');
 /**
  * Server constructor
- * 
- * @param {Object} config 
+ *
+ * @param {Object} config
  */
-function Server(config) {
+class Server extends EventEmitter {
+    constructor(config) {
 
-    this.config = config;
-    this.app = express();
-    this.server = new http.Server(this.app);
-    this.clients = [];
+        EventEmitter.call(this);
 
-    this.onSocketConnection     = this.onSocketConnection.bind(this);
-    this.authorizationHandler   = this.authorizationHandler.bind(this);
-    this.onError                = this.onError.bind(this);
+        this.config = config;
+        this.app = express();
+        this.server = new http.Server(this.app);
+        this.clients = [];
+        this.onSocketConnection = this.onSocketConnection.bind(this);
+        this.authorizationHandler = this.authorizationHandler.bind(this);
+        this.onError = this.onError.bind(this);
+        this.app.use(express['static']('web'));
+        this.server.on('error', this.onError);
+        this.server.on('upgrade', this.authorizationHandler);
+        this.server.on('start', this.onStart);
+        this.server.listen(config.port);
 
-    this.app.use(express['static']('web'));
+        console.info('Listening on port %s', config.port);
+    };
 
-    this.server.on('error', this.onError);
-    this.server.on('upgrade', this.authorizationHandler);
-    this.server.listen(config.port);
+    authorizationHandler(request, socket, head) {
+        // Si la socket n'est pas une socket web
+        if(!WebSocket.isWebSocket(request)) {
+            return socket.end();
+        }
     
+        var websocket = new WebSocket(request, socket, head, ['websocket']),
+            ip = request.headers['x-real-ip'] || request.connection.remoteAdresse;
+    
+        return this.onSocketConnection(websocket, ip);
+    };
 
-    console.info('Listening on port %s', config.port);
-}
+    onSocketConnection(socket, ip) {
 
-Server.prototype.constructor = Server;
+        var client = new ServerSocketClient(socket, ip);
+        client.id = this.clients.length;
+        this.clients.push(client);
+        
+        console.info('Client %s connected', client.id);
+    };
 
-Server.prototype.authorizationHandler = function(request, socket, head) {
-    // Si la socket n'est pas une socket web
-    if(!WebSocket.isWebSocket(request)) {
-        return socket.end();
+    onStart(data) {
+        console.info('Application démarré par le client avec les informations suivantes : ' + JSON.stringify(data));
     }
 
-    var websocket = new WebSocket(request, socket, head, ['websocket']),
-        ip = request.headers['x-real-ip'] || request.connection.remoteAdresse;
+    /**
+     * On Error
+     * 
+     * @param {Error} error 
+     */
+    onError(error) {
 
-    return this.onSocketConnection(websocket, ip);
+        console.error('Server error :', + error.stack);
+    }
 }
 
-Server.prototype.onSocketConnection = function(socket, ip) {
 
-    var client = new ServerSocketClient(socket, ip);
-    client.id = this.clients.length;
-    this.clients.push(client);
+class ServerSocketClient extends ModelSocketClient {
 
-    console.info('Client %s connected', client.id);
+    constructor(socket, ip) {
+        super(socket);
+
+        this.ip     = ip;
+        this.id     = null;
+    }
 }
+class ModelSocketClient extends EventEmitter {
 
-/**
- * On Error
- * 
- * @param {Error} error 
- */
-Server.prototype.onError = function(error) {
+    constructor(socket) {
+        super();
 
-    console.error('Server error :', + error.stack);
+        this.socket     = socket;
+        this.connect    = true;
+
+        this.attachEvent();
+    }
+
+    attachEvent() {
+    
+        this.socket.addEventListener('message', this.onMessage);
+        this.socket.addEventListener('close', this.onClose);
+    }
+
+    onMessage(e) {
+        console.info('Message Received : ', JSON.parse(e.data));
+    }
+
+    onClose(e) {
+        this.connected = false;
+        console.info('Socket closed');
+    }
+
+    sendEvent(event) {
+        this.socket.send(JSON.stringify(event));
+    }
 }
-function ServerSocketClient(socket, ip) {
-
-    ModelSocketClient.call(this, socket);
-
-    this.ip     = ip;
-    this.id     = null;
-}
-
-ServerSocketClient.prototype = Object.create(ModelSocketClient.prototype);
-ServerSocketClient.prototype.constructor = ServerSocketClient;
 var config,
     packageInfo = require('../package.json'),
     config = {
