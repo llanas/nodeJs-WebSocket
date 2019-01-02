@@ -1,21 +1,16 @@
 class SocketClient extends ModelSocketClient {
     
     constructor() {
-        super();
+        var Socket = window.MozWebSocket || window.WebSocket;
+        var socketBuilder = new Socket('ws://' + document.location.host + document.location.pathname, ['websocket']);
+       
+        super(socketBuilder);
 
         this.onOpen     = this.onOpen.bind(this);
         this.connected  = false
-
-        var Socket      = window.MozWebSocket || window.WebSocket;
-
-        super.call(new Socket('ws://' + document.location.host + document.location.pathname, ['websocket']));
-
+        
         this.socket.addEventListener('open', this.onOpen);
         this.socket.addEventListener('start', this.onStart);
-    }
-
-    attachEvent() {
-        this.socket.addEventListener('open', this.onOpen);
     }
 
     onOpen() {

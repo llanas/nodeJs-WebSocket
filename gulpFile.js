@@ -1,10 +1,11 @@
-var gulp      = require('gulp'),
-    concat    = require('gulp-concat'),
-    uglify    = require('gulp-uglify'),
-    jshint    = require('gulp-jshint'),
-    minifyCSS = require('gulp-minify-css'),
-    htmlmin   = require('gulp-htmlmin'),
-    wrap      = require('gulp-wrap')
+var gulp        = require('gulp'),
+    concat      = require('gulp-concat'),
+    uglify      = require('gulp-uglify'),
+    jshint      = require('gulp-jshint'),
+    minifyCSS   = require('gulp-minify-css'),
+    htmlmin     = require('gulp-htmlmin'),
+    wrap        = require('gulp-wrap'),
+    babel       = require("gulp-babel");
 
 var jsDir   = './web/js/', 
     expose = [],
@@ -27,7 +28,7 @@ gulp.task('server', function() {
 gulp.task('front-full', function() {
     return gulp.src(recipes.client.files)
         .pipe(concat(recipes.client.name))
-        .pipe(wrap('(function(){\n"use strict";\n<%= contents %>\n})();'))
+        .pipe(wrap('(function(){\n<%= contents %>\n})();'))
         .pipe(gulp.dest(recipes.client.path))
 });
 

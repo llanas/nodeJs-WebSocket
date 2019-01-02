@@ -3,8 +3,9 @@
     "path": "bin/",
     "files": [
         "src/server/dependencies.js",
-        "src/server/*/**/*.js",
         "src/shared/**/*.js",
+        "src/server/*/**/*.js",
+        "src/server/*/modules/*.js",
         "src/server/launcher.js"
     ]
 }

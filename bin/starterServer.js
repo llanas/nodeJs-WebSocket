@@ -2,15 +2,49 @@ var EventEmitter = require('events').EventEmitter,
     WebSocket = require('faye-websocket'),
     express = require('express'),
     http = require('http');
-/**
- * Server constructor
- *
- * @param {Object} config
- */
+class ModelSocketClient extends EventEmitter {
+
+    constructor(socket) {
+        super();
+
+        this.socket     = socket;
+        this.connect    = true;
+
+        this.attachEvent();
+    }
+
+    attachEvent() {
+    
+        this.socket.addEventListener('message', this.onMessage);
+        this.socket.addEventListener('close', this.onClose);
+    }
+
+    onMessage(e) {
+        console.info('Message Received : ', JSON.parse(e.data));
+    }
+
+    onClose(e) {
+        this.connected = false;
+        console.info('Socket closed');
+    }
+
+    sendEvent(event) {
+        this.socket.send(JSON.stringify(event));
+    }
+}
+class ServerSocketClient extends ModelSocketClient {
+
+    constructor(socket, ip) {
+        super(socket);
+
+        this.ip     = ip;
+        this.id     = null;
+    }
+}
 class Server extends EventEmitter {
     constructor(config) {
 
-        EventEmitter.call(this);
+        super();
 
         this.config = config;
         this.app = express();
@@ -42,6 +76,7 @@ class Server extends EventEmitter {
 
     onSocketConnection(socket, ip) {
 
+
         var client = new ServerSocketClient(socket, ip);
         client.id = this.clients.length;
         this.clients.push(client);
@@ -65,45 +100,6 @@ class Server extends EventEmitter {
 }
 
 
-class ServerSocketClient extends ModelSocketClient {
-
-    constructor(socket, ip) {
-        super(socket);
-
-        this.ip     = ip;
-        this.id     = null;
-    }
-}
-class ModelSocketClient extends EventEmitter {
-
-    constructor(socket) {
-        super();
-
-        this.socket     = socket;
-        this.connect    = true;
-
-        this.attachEvent();
-    }
-
-    attachEvent() {
-    
-        this.socket.addEventListener('message', this.onMessage);
-        this.socket.addEventListener('close', this.onClose);
-    }
-
-    onMessage(e) {
-        console.info('Message Received : ', JSON.parse(e.data));
-    }
-
-    onClose(e) {
-        this.connected = false;
-        console.info('Socket closed');
-    }
-
-    sendEvent(event) {
-        this.socket.send(JSON.stringify(event));
-    }
-}
 var config,
     packageInfo = require('../package.json'),
     config = {

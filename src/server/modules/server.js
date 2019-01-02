@@ -1,12 +1,7 @@
-/**
- * Server constructor
- *
- * @param {Object} config
- */
 class Server extends EventEmitter {
     constructor(config) {
 
-        EventEmitter.call(this);
+        super();
 
         this.config = config;
         this.app = express();
@@ -37,6 +32,7 @@ class Server extends EventEmitter {
     };
 
     onSocketConnection(socket, ip) {
+
 
         var client = new ServerSocketClient(socket, ip);
         client.id = this.clients.length;

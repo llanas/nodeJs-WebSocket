@@ -10,8 +10,8 @@
   "main": "web/starter.js",
   "dependencies": {
     "tom32i-event-emitter.js": "~0.1.*",
-    "angular": "6.2.0",
-    "angular-route": "~6.2.^"
+    "angular": "1.7.*",
+    "angular-route": "1.7.*"
   },
   "ignore": [
     "**/.*",
@@ -19,6 +19,6 @@
     "bower_components"
   ],
   "resolutions": {
-    "angular": "6.2.^"
+    "angular": "1.7.*"
   }
 }
